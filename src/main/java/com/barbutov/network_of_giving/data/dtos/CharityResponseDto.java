@@ -8,24 +8,21 @@ public class CharityResponseDto {
     private double budgetRequired;
     private int volunteersCount;
     private double collectedAmount;
-    private long creatorId;
-    private String thumbnail;
+    private String creatorName;
 
     public CharityResponseDto() {
     }
 
     public CharityResponseDto(long id, String name, String description, int desiredParticipants,
-                              double budgetRequired, int volunteersCount, double collectedAmount, long creatorId,
-                              String thumbnail) {
+                              double budgetRequired, int volunteersCount, double collectedAmount, String creatorName) {
         this.id = id;
         this.name = name;
-        this.thumbnail = thumbnail;
         this.description = description;
         this.desiredParticipants = desiredParticipants;
         this.budgetRequired = budgetRequired;
         this.volunteersCount = volunteersCount;
         this.collectedAmount = collectedAmount;
-        this.creatorId = creatorId;
+        this.creatorName = creatorName;
     }
 
     public String getName() {
@@ -34,14 +31,6 @@ public class CharityResponseDto {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getThumbnail() {
-        return thumbnail;
-    }
-
-    public void setThumbnail(String thumbnail) {
-        this.thumbnail = thumbnail;
     }
 
     public String getDescription() {
@@ -92,11 +81,11 @@ public class CharityResponseDto {
         this.collectedAmount = collectedAmount;
     }
 
-    public long getCreatorId() {
-        return creatorId;
+    public String getCreatorName() {
+        return creatorName;
     }
 
-    public void setCreatorId(long creatorId) {
-        this.creatorId = creatorId;
+    public void setCreatorName(String creatorName) {
+        this.creatorName = creatorName;
     }
 }

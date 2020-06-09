@@ -9,6 +9,7 @@ import com.barbutov.network_of_giving.services.contracts.CharityService;
 import com.barbutov.network_of_giving.services.contracts.DonationService;
 import com.barbutov.network_of_giving.services.contracts.UserService;
 import com.barbutov.network_of_giving.services.contracts.VolunteerService;
+import com.barbutov.network_of_giving.ui.RequestHandler;
 import javassist.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,52 +17,81 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 public class CharityController {
     private final CharityService charityService;
-
     private final UserService userService;
-
     private final DonationService donationService;
-
     private final VolunteerService volunteerService;
+    private final RequestHandler requestHandler;
 
     public CharityController(CharityService charityService, UserService userService, DonationService donationService,
-                             VolunteerService volunteerService) {
+                             VolunteerService volunteerService, RequestHandler requestHandler) {
         this.charityService = charityService;
         this.userService = userService;
         this.donationService = donationService;
         this.volunteerService = volunteerService;
+        this.requestHandler = requestHandler;
     }
 
-    @GetMapping(value = "/", produces = "application/json")
-    public List<CharityResponseDto> getAll() {
-        return this.charityService.getAllCharitiesAsResponseDtos();
-    }
-
-    @GetMapping(value = "/charity/{id}", produces = "application/json")
-    public ResponseEntity<CharityResponseDto> getById(@PathVariable String id) {
+    @GetMapping(value = "/", produces = MediaType.TEXT_HTML_VALUE)
+    public ResponseEntity<String> getAll(Authentication authentication) {
         try {
-            CharityResponseDto charity = this.charityService.getCharityByIdAsResponseDto(Long.parseLong(id));
+            List<CharityResponseDto> responseDtos = this.charityService.getAllCharitiesAsResponseDtos();
 
-            return new ResponseEntity<>(charity, HttpStatus.OK);
+            Object[] model = new Object[responseDtos.size()];
+            for (int i = 0; i < responseDtos.size(); i++) {
+                model[i] = responseDtos.get(i);
+            }
+
+            String html = this.requestHandler.handleRequest(authentication, "charities", "charities",
+                    model, "charityDetails");
+
+            return new ResponseEntity<>(html, HttpStatus.OK);
+        } catch (IOException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(value = "/charity/{id}", produces = MediaType.TEXT_HTML_VALUE)
+    public ResponseEntity<String> getById(Authentication authentication, @PathVariable String id) {
+        try {
+            CharityResponseDto responseDto = this.charityService.getCharityByIdAsResponseDto(Long.parseLong(id));
+            Object[] model = new Object[1];
+            model[0] = responseDto;
+
+            String html = this.requestHandler.handleRequest(authentication, "charity", "charity", model);
+
+            return new ResponseEntity<>(html, HttpStatus.OK);
         } catch (NotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (IOException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(value = "charity/create", produces = MediaType.TEXT_HTML_VALUE)
+    public ResponseEntity getCreateCharity(Authentication authentication){
+        try {
+            String html = this.requestHandler.handleRequest(authentication, "createCharity", "createCharity");
+            return new ResponseEntity<>(html, HttpStatus.OK);
+        } catch (IOException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PostMapping(value = "charity/create", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Charity> createCharity(@RequestBody CharityRequestDto charityRequestDto, Authentication authentication){
+    public ResponseEntity<Long> createCharity(@RequestBody CharityRequestDto charityRequestDto, Authentication authentication){
         try {
             User user = this.userService.findByUsername(authentication.getName());
 
-            this.charityService.addCharity(charityRequestDto, user);
+            Charity charity = this.charityService.addCharity(charityRequestDto, user);
 
-            return new ResponseEntity<>(HttpStatus.OK); //maybe redirect
+            return new ResponseEntity<>(charity.getId(), HttpStatus.OK);
         } catch (NotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e){

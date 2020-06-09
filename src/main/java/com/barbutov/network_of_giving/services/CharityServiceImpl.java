@@ -35,7 +35,8 @@ public class CharityServiceImpl implements CharityService {
 
         List<CharityResponseDto> charityResponseDtos = new ArrayList<>();
         for (Charity charity : charities) {
-            CharityResponseDto dto = mapCharityToCharityResponseDto(charity);
+            String creatorName = this.charityRepository.getCreator(charity.getId());
+            CharityResponseDto dto = mapCharityToCharityResponseDto(charity, creatorName);
 
             charityResponseDtos.add(dto);
         }
@@ -49,8 +50,9 @@ public class CharityServiceImpl implements CharityService {
 
         if(optional.isPresent()){
             Charity charity = optional.get();
+            String creatorName = this.charityRepository.getCreator(charity.getId());
 
-            return mapCharityToCharityResponseDto(charity);
+            return mapCharityToCharityResponseDto(charity, creatorName);
         } else {
             throw new NotFoundException(CHARITY_NOT_FOUND);
         }
@@ -63,11 +65,10 @@ public class CharityServiceImpl implements CharityService {
         return optionalCheck(optional);
     }
 
-    private CharityResponseDto mapCharityToCharityResponseDto(Charity charity){
+    private CharityResponseDto mapCharityToCharityResponseDto(Charity charity, String creatorName){
         return new CharityResponseDto(charity.getId(), charity.getName(),
                 charity.getDescription(), charity.getDesiredParticipants(), charity.getBudgetRequired(),
-                charity.getVolunteersCount(), charity.getCollectedAmount(), charity.getCreatorId(),
-                charity.getThumbnail());
+                charity.getVolunteersCount(), charity.getCollectedAmount(), creatorName);
     }
 
     @Override
@@ -78,18 +79,18 @@ public class CharityServiceImpl implements CharityService {
     }
 
     @Override
-    public void addCharity(CharityRequestDto charityRequestDto, User user) {
+    public Charity addCharity(CharityRequestDto charityRequestDto, User user) {
         String validation = this.charityValidator.validateCharityDto(charityRequestDto);
 
         if(!validation.equals(Constants.VALID)){
             throw new IllegalArgumentException(validation);
         }
 
-        Charity charity = new Charity(charityRequestDto.getName(), charityRequestDto.getThumbnail(), charityRequestDto.getDescription(),
+        Charity charity = new Charity(charityRequestDto.getName(), charityRequestDto.getDescription(),
                 charityRequestDto.getDesiredParticipants(), charityRequestDto.getBudgetRequired(), 0, 0,
                 user);
 
-        this.charityRepository.save(charity);
+        return this.charityRepository.save(charity);
     }
 
     @Override
@@ -121,7 +122,7 @@ public class CharityServiceImpl implements CharityService {
         List<Charity> charities = this.charityRepository.findAllVolunteeredToCharities(username);
         List<CharityResponseDto> charityResponseDtos = new ArrayList<>();
         for(Charity charity : charities){
-            charityResponseDtos.add(mapCharityToCharityResponseDto(charity));
+            charityResponseDtos.add(mapCharityToCharityResponseDto(charity, username));
         }
 
         return charityResponseDtos;
@@ -133,7 +134,7 @@ public class CharityServiceImpl implements CharityService {
 
         List<CharityResponseDto> charityResponseDtos = new ArrayList<>();
         for(Charity charity : charities){
-            charityResponseDtos.add(mapCharityToCharityResponseDto(charity));
+            charityResponseDtos.add(mapCharityToCharityResponseDto(charity, username));
         }
 
         return charityResponseDtos;
@@ -145,7 +146,7 @@ public class CharityServiceImpl implements CharityService {
 
         List<CharityResponseDto> charityResponseDtos = new ArrayList<>();
         for(Charity charity : charities){
-            charityResponseDtos.add(mapCharityToCharityResponseDto(charity));
+            charityResponseDtos.add(mapCharityToCharityResponseDto(charity, username));
         }
 
         return charityResponseDtos;

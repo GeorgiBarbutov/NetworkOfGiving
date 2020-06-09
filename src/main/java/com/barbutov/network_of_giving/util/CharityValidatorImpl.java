@@ -11,7 +11,7 @@ public class CharityValidatorImpl implements CharityValidator {
 
     @Override
     public String validateCharityDto(CharityRequestDto charityRequestDto) {
-        if(charityRequestDto.getName() == null || charityRequestDto.getThumbnail() == null ||
+        if(charityRequestDto.getName() == null ||
                 charityRequestDto.getDescription() == null){
             throw new IllegalArgumentException(Constants.NULL_FIELDS);
         }

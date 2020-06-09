@@ -2,7 +2,6 @@ package com.barbutov.network_of_giving.data.dtos;
 
 public class CharityRequestDto {
     private String name;
-    private String thumbnail;
     private String description;
     private int desiredParticipants;
     private double budgetRequired;
@@ -10,9 +9,8 @@ public class CharityRequestDto {
     public CharityRequestDto() {
     }
 
-    public CharityRequestDto(String name, String thumbnail, String description, int desiredParticipants, double budgetRequired) {
+    public CharityRequestDto(String name, String description, int desiredParticipants, double budgetRequired) {
         this.name = name;
-        this.thumbnail = thumbnail;
         this.description = description;
         this.desiredParticipants = desiredParticipants;
         this.budgetRequired = budgetRequired;
@@ -24,14 +22,6 @@ public class CharityRequestDto {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getThumbnail() {
-        return thumbnail;
-    }
-
-    public void setThumbnail(String thumbnail) {
-        this.thumbnail = thumbnail;
     }
 
     public String getDescription() {

@@ -19,9 +19,6 @@ public class Charity {
     @Column(nullable = false, length = Constants.CHARITY_NAME_MAX_LENGTH)
     private String name;
 
-    @Column(nullable = false)
-    private String thumbnail;
-
     @Column(nullable = false, length = Constants.CHARITY_MAX_DESCRIPTION_LENGTH)
     private String description;
 
@@ -52,10 +49,9 @@ public class Charity {
     public Charity() {
     }
 
-    public Charity(String name, String thumbnail, String description, int desiredParticipants, double budgetRequired,
+    public Charity(String name, String description, int desiredParticipants, double budgetRequired,
                    int volunteersCount, double collectedAmount, User creator) {
         this.name = name;
-        this.thumbnail = thumbnail;
         this.description = description;
         this.desiredParticipants = desiredParticipants;
         this.budgetRequired = budgetRequired;
@@ -78,14 +74,6 @@ public class Charity {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getThumbnail() {
-        return thumbnail;
-    }
-
-    public void setThumbnail(String thumbnail) {
-        this.thumbnail = thumbnail;
     }
 
     public String getDescription() {

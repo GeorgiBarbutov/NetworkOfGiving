@@ -13,7 +13,7 @@ public interface CharityService {
     Charity getCharityById(long id) throws NotFoundException;
     CharityResponseDto getCharityByIdAsResponseDto(long id) throws NotFoundException;
     Charity getCharityByIdAndCreator(long id, User creator) throws NotFoundException;
-    void addCharity(CharityRequestDto charityRequestDto, User user);
+    Charity addCharity(CharityRequestDto charityRequestDto, User user);
     void deleteCharity(long charityId) throws NotFoundException;
     void donateToCharity(Charity charity, double amount);
     void volunteerToCharity(Charity charity);
