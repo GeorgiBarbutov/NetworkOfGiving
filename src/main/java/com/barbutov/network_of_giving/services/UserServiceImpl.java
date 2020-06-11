@@ -15,6 +15,7 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserService {
     private static final String USERNAME_NOT_FOUND = "Wrong username";
+    private static final String USER_ROLE = "USER";
 
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
@@ -37,7 +38,7 @@ public class UserServiceImpl implements UserService {
         String encodedPassword = encoder.encode(registerDto.getPassword());
 
         User user = new User(registerDto.getFirstName(), registerDto.getLastName(), registerDto.getUsername(),
-                encodedPassword, registerDto.getGender(), registerDto.getAge(), registerDto.getLocation(), "USER");
+                encodedPassword, registerDto.getGender(), registerDto.getAge(), registerDto.getLocation(), USER_ROLE);
 
         userRepository.save(user);
     }

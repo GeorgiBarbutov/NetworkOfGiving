@@ -11,6 +11,7 @@ import java.util.List;
 public interface CharityService {
     List<CharityResponseDto> getAllCharitiesAsResponseDtos();
     Charity getCharityById(long id) throws NotFoundException;
+    CharityResponseDto getCharityByName(String name) throws NotFoundException;
     CharityResponseDto getCharityByIdAsResponseDto(long id) throws NotFoundException;
     Charity getCharityByIdAndCreator(long id, User creator) throws NotFoundException;
     Charity addCharity(CharityRequestDto charityRequestDto, User user);

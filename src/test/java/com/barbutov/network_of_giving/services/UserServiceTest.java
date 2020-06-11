@@ -45,7 +45,7 @@ public class UserServiceTest {
         PasswordEncoder encoder = new BCryptPasswordEncoder();
         this.userService = new UserServiceImpl(this.userRepository, encoder, registerValidator);
 
-        this.testUser = new User("test", "user", "test", "1234", Gender.Male, 20,
+        this.testUser = new User("test", "user", "test", "1234", Gender.MALE, 20,
                 "Sofia", "USER");
     }
 
@@ -83,7 +83,7 @@ public class UserServiceTest {
     @Test
     public void userServiceAddsUsersSuccessfully() {
         RegisterDto correctRegisterDto = new RegisterDto("register", "test", "register",
-                "1234", "1234", Gender.Male, 23, "Sofia");
+                "1234", "1234", Gender.MALE, 23, "Sofia");
 
         Mockito.when(this.userRepository.findByUsername(correctRegisterDto.getUsername())).thenReturn(Optional.ofNullable(null));
         Mockito.when(this.userRepository.save(testUser)).thenReturn(testUser);
@@ -94,7 +94,7 @@ public class UserServiceTest {
     @Test
     public void userServiceThrowsExceptionWhenUsernameIsTaken() {
         RegisterDto takenUsername = new RegisterDto("test", "test", "test",
-                "1234", "1234", Gender.Male, 23, "Sofia");
+                "1234", "1234", Gender.MALE, 23, "Sofia");
         boolean thrown = false;
         String exception = "";
 
@@ -115,7 +115,7 @@ public class UserServiceTest {
     @Test
     public void userServiceThrowsExceptionOnNullParametersWhenAddingUsersWithIncorrectParameters() {
         RegisterDto nullRegisterDto = new RegisterDto(null, "test", "register",
-                "1234", "1234", Gender.Male, 23, "Sofia");
+                "1234", "1234", Gender.MALE, 23, "Sofia");
 
         TemplateForUserServiceThrowsExceptionWhenAddingUsers(nullRegisterDto, Constants.NULL_FIELDS);
     }
@@ -123,7 +123,7 @@ public class UserServiceTest {
     @Test
     public void userServiceThrowsExceptionPasswordMismatchWhenAddingUsersWithIncorrectParameters() {
         RegisterDto passwordMismatch = new RegisterDto("register", "test", "register",
-                "1234", "1234567", Gender.Male, 23, "Sofia");
+                "1234", "1234567", Gender.MALE, 23, "Sofia");
 
         TemplateForUserServiceThrowsExceptionWhenAddingUsers(passwordMismatch, RegisterValidatorImpl.PASSWORD_MISMATCH);
     }
@@ -131,7 +131,7 @@ public class UserServiceTest {
     @Test
     public void userServiceThrowsExceptionAgeOutSideOfRangeWhenAddingUsersWithIncorrectParameters() {
         RegisterDto ageTooBig = new RegisterDto("register", "test", "register", "1234",
-                "1234", Gender.Male, 23213, "Sofia");
+                "1234", Gender.MALE, 23213, "Sofia");
 
         TemplateForUserServiceThrowsExceptionWhenAddingUsers(ageTooBig, RegisterValidatorImpl.AGE_OUTSIDE_OF_RANGE);
     }
@@ -139,7 +139,7 @@ public class UserServiceTest {
     @Test
     public void userServiceThrowsExceptionWhenFirstNameIsTooLongWhenAddingUsers() {
         RegisterDto firstNameTooLong = new RegisterDto("registerregisterregisterregisterregisterregisterregisterregister",
-                "test", "register", "1234", "1234", Gender.Male, 23, "Sofia");
+                "test", "register", "1234", "1234", Gender.MALE, 23, "Sofia");
 
         TemplateForUserServiceThrowsExceptionWhenAddingUsers(firstNameTooLong, RegisterValidatorImpl.FIRST_NAME_TOO_LONG);
     }
@@ -148,7 +148,7 @@ public class UserServiceTest {
     public void userServiceThrowsExceptionWhenLastNameIsTooLongWhenAddingUsers() {
         RegisterDto lastNameTooLong = new RegisterDto("register",
                 "registerregisterregisterregisterregisterregisterregisterregister", "register",
-                "1234", "1234", Gender.Male, 23, "Sofia");
+                "1234", "1234", Gender.MALE, 23, "Sofia");
 
         TemplateForUserServiceThrowsExceptionWhenAddingUsers(lastNameTooLong, RegisterValidatorImpl.LAST_NAME_TOO_LONG);
     }
@@ -157,7 +157,7 @@ public class UserServiceTest {
     public void userServiceThrowsExceptionWhenUsernameTooLongWhenAddingUsers() {
         RegisterDto usernameTooLong = new RegisterDto("register", "test",
                 "registerregisterregisterregisterregisterregisterregisterregisterregister", "1234",
-                "1234", Gender.Male, 23, "Sofia");
+                "1234", Gender.MALE, 23, "Sofia");
 
         TemplateForUserServiceThrowsExceptionWhenAddingUsers(usernameTooLong, RegisterValidatorImpl.USERNAME_TOO_LONG);
     }
@@ -166,7 +166,7 @@ public class UserServiceTest {
     public void userServiceThrowsExceptionWhenPasswordIsTooLongWhenAddingUsers() {
         RegisterDto passwordTooLong = new RegisterDto("register", "test",
                 "user", "1234registerregisterregisterregisterregisterregisterregisterregisterregister",
-                "1234registerregisterregisterregisterregisterregisterregisterregisterregister", Gender.Male,
+                "1234registerregisterregisterregisterregisterregisterregisterregisterregister", Gender.MALE,
                 23, "Sofia");
 
         TemplateForUserServiceThrowsExceptionWhenAddingUsers(passwordTooLong, RegisterValidatorImpl.PASSWORD_TOO_LONG);

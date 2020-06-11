@@ -65,6 +65,20 @@ public class CharityServiceImpl implements CharityService {
         return optionalCheck(optional);
     }
 
+    @Override
+    public CharityResponseDto getCharityByName(String name) throws NotFoundException {
+        Optional<Charity> optional = this.charityRepository.findByName(name);
+
+        if(optional.isPresent()){
+            Charity charity = optional.get();
+            String creatorName = this.charityRepository.getCreator(charity.getId());
+
+            return mapCharityToCharityResponseDto(charity, creatorName);
+        } else {
+            throw new NotFoundException(CHARITY_NOT_FOUND);
+        }
+    }
+
     private CharityResponseDto mapCharityToCharityResponseDto(Charity charity, String creatorName){
         return new CharityResponseDto(charity.getId(), charity.getName(),
                 charity.getDescription(), charity.getDesiredParticipants(), charity.getBudgetRequired(),

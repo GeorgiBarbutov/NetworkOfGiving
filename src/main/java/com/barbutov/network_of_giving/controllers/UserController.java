@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 public class UserController {
     private final UserService userService;
@@ -31,8 +30,13 @@ public class UserController {
     }
 
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity registrationPost(@RequestBody RegisterDto registerDto) {
+    public ResponseEntity<String> registrationPost(@RequestBody RegisterDto registerDto, Authentication authentication) {
         try {
+            //you can't register if you are logged in
+            if(authentication != null){
+                return new ResponseEntity("Error", HttpStatus.BAD_REQUEST);
+            }
+
             this.userService.addUser(registerDto);
 
             return new ResponseEntity<>(HttpStatus.OK);
@@ -44,6 +48,11 @@ public class UserController {
     @GetMapping(value = "/register", produces = MediaType.TEXT_HTML_VALUE)
     public ResponseEntity<String> registrationGet(Authentication authentication) {
         try {
+            //you can't register if you are logged in
+            if(authentication != null){
+                return new ResponseEntity("Error", HttpStatus.BAD_REQUEST);
+            }
+
             String html = this.requestHandler.handleRequest(authentication, "register", "register");
 
             return new ResponseEntity<>(html, HttpStatus.OK);
@@ -52,27 +61,62 @@ public class UserController {
         }
     }
 
+    @GetMapping(value = "/login", produces = MediaType.TEXT_HTML_VALUE)
+    public ResponseEntity<String> getLogin (Authentication authentication){
+        try {
+            //you can't login if you are logged in
+            if(authentication != null){
+                return new ResponseEntity("Error", HttpStatus.BAD_REQUEST);
+            }
+
+            String html = this.requestHandler.handleRequest(authentication, "login");
+
+            return new ResponseEntity<>(html, HttpStatus.OK);
+        } catch (IOException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping(value = "/profile/{username}", produces = MediaType.TEXT_HTML_VALUE)
-    public ResponseEntity<ProfileDto> getProfile (@PathVariable String username){
+    public ResponseEntity<String> getProfile (@PathVariable String username, Authentication authentication){
         try {
             ProfileDto profileDto = getProfileDto(username);
 
-            return new ResponseEntity<>(profileDto, HttpStatus.OK);
+            Object[][] models = getProfileModels(profileDto);
+
+            String html = this.requestHandler.handleRequest(authentication, "profile", "profile",
+                    models, new String[] { "charityDetails", "charityDetails", "charityDetails" });
+
+            return new ResponseEntity<>(html, HttpStatus.OK);
         } catch (NotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (IOException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping(value = "/profile", produces = MediaType.TEXT_HTML_VALUE)
-    public ResponseEntity<ProfileDto> getMyProfile (Authentication authentication){
+    public ResponseEntity<String> getMyProfile (Authentication authentication){
         try {
             String username = authentication.getName();
             ProfileDto profileDto = getProfileDto(username);
 
-            return new ResponseEntity<>(profileDto, HttpStatus.OK);
+            Object[][] models = getProfileModels(profileDto);
+
+            String html = this.requestHandler.handleRequest(authentication, "profile", "profile",
+                    models, new String[] { "charityDetails", "charityDetails", "charityDetails" });
+
+            return new ResponseEntity<>(html, HttpStatus.OK);
         } catch (NotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (IOException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping(value = "/user", produces = MediaType.TEXT_HTML_VALUE)
+    public ResponseEntity<String> getCurrentUsername (Authentication authentication){
+        return new ResponseEntity<>(authentication.getName(), HttpStatus.OK);
     }
 
     private ProfileDto getProfileDto(String username) throws NotFoundException {
@@ -84,5 +128,33 @@ public class UserController {
 
         return new ProfileDto(user.getFirstName(), user.getLastName(), user.getUsername(),
                 user.getGender(), user.getAge(), createdCharities, donatedToCharities, volunteeredToCharities);
+    }
+
+    private Object[][] getProfileModels(ProfileDto profileDto){
+        List<CharityResponseDto> createdCharities = profileDto.getCreatedCharities();
+        List<CharityResponseDto> volunteeredInCharities = profileDto.getVolunteeredInCharities();
+        List<CharityResponseDto> donatedToCharities = profileDto.getDonatedToCharities();
+
+        Object[][] models = new Object[4][];
+
+        models[0] = new Object[createdCharities.size()];
+        for (int i = 0; i < createdCharities.size(); i++) {
+            models[0][i] = createdCharities.get(i);
+        }
+
+        models[1] = new Object[volunteeredInCharities.size()];
+        for (int i = 0; i < volunteeredInCharities.size(); i++) {
+            models[1][i] = volunteeredInCharities.get(i);
+        }
+
+        models[2] = new Object[donatedToCharities.size()];
+        for (int i = 0; i < donatedToCharities.size(); i++) {
+            models[2][i] = donatedToCharities.get(i);
+        }
+
+        models[3] = new Object[1];
+        models[3][0] = profileDto;
+
+        return models;
     }
 }

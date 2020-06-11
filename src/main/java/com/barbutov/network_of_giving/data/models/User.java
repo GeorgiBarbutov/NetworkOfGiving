@@ -59,7 +59,8 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Volunteer> volunteers = new ArrayList<>();
 
-    public User(String firstName, String lastName, String username, String password, Gender gender, int age, String location, String role) {
+    public User(String firstName, String lastName, String username, String password, Gender gender, int age,
+                String location, String role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;

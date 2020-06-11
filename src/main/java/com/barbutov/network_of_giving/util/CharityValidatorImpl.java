@@ -6,8 +6,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CharityValidatorImpl implements CharityValidator {
-    public static final String NAME_TOO_LONG = "Charity name is too long";
-    public static final String DESCRIPTION_TOO_LONG = "Description is too long";
+    private static final String NAME_TOO_LONG = "Charity name is too long";
+    private static final String DESCRIPTION_TOO_LONG = "Description is too long";
 
     @Override
     public String validateCharityDto(CharityRequestDto charityRequestDto) {

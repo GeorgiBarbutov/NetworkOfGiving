@@ -14,7 +14,7 @@ public class RegisterValidatorImpl implements RegisterValidator {
     public static final String LAST_NAME_TOO_LONG = "Last Name is too long";
     public static final String PASSWORD_TOO_LONG = "Password is too long";
     public static final String USERNAME_TOO_LONG = "Username is too long";
-    public static final String LOCATION_TOO_LONG = "Location is too long";
+    private static final String LOCATION_TOO_LONG = "Location is too long";
     public static final String USER_IS_TAKEN = "Username is taken";
     public static final String VALID = "VALID";
 

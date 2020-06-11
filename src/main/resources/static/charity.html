@@ -1,10 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+<div><h2>{{name}}</h2></div>
+<div>Description: {{description}}</div>
+<div id="budget">Budget: {{collectedAmount}}/{{budgetRequired}}</div>
+<div id="volunteers">Volunteers: {{volunteersCount}}/{{desiredParticipants}}</div>
+<div id="creator" onclick="goToCreator()">Creator: {{creatorName}}</div>
+<div id="buttons">
+    <button id="volunteerButton" onclick="volunteer({{{id}}})">Volunteer</button>
+    <button id="withholdButton" onclick="withhold({{{id}}})">Withhold Volunteering</button>
+    <div class="control-group">
+        <label class="control-label" for="amount">Amount</label>
+        <div class="controls">
+            <input type="number" step="0.01" id="amount" name="amount" placeholder="" class="input-xlarge">
+        </div>
+    </div>
+    <button id="donateButton" onclick="donate({{{id}}})">Donate</button>
+    <button id="deleteButton" onclick="deleteCharity({{{id}}})">Delete</button>
+</div>
+<div id="charityId">{{{id}}}</div>

@@ -11,6 +11,9 @@ import javax.transaction.Transactional;
 import java.util.Optional;
 
 public interface VolunteerRepository extends CrudRepository<Volunteer, Long> {
+    @Query(nativeQuery = true, value = "SELECT v.id, charity_id, user_id FROM Volunteers AS v JOIN Charities AS c ON v.charity_id = c.id JOIN Users AS u ON v.user_id = u.id WHERE v.charity_id = ?1 AND u.username = ?2")
+    Optional<Volunteer> findByCharityIdAndUsername(long charityId, String username);
+
     Optional<Volunteer> findByCharityAndUser(Charity charity, User user);
 
     @Modifying

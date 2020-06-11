@@ -8,5 +8,6 @@ public interface VolunteerService {
     Volunteer addVolunteer(Charity charity, User user);
     void removeVolunteer(Charity charity, User user);
     boolean existsByCharityAndUser(Charity charity, User user);
+    boolean existsByCharityIdAndUsername(long charityId, String username);
     void removeAllVolunteersByCharity(Charity charity);
 }

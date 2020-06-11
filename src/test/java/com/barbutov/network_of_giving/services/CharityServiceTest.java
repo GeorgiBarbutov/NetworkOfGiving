@@ -42,7 +42,7 @@ public class CharityServiceTest {
     @Before
     public void setUp() {
         this.creator = new User();
-        this.charity = new Charity("Charity1", "D:/TestImage.jpg", "description1", 10,
+        this.charity = new Charity("Charity1", "description1", 10,
                 100, 0, 0, creator);
 
         CharityValidator charityValidator = new CharityValidatorImpl();
@@ -51,11 +51,11 @@ public class CharityServiceTest {
     @Test
     public void getAllCharitiesAsResponseDtosReturnsAllCharities(){
         List<Charity> charityList = new ArrayList<>();
-        charityList.add(new Charity("Charity1", "D:/TestImage.jpg", "description1", 10,
+        charityList.add(new Charity("Charity1", "description1", 10,
                 100, 0, 0, creator));
-        charityList.add(new Charity("Charity2", "D:/TestImage.jpg", "description2", 101,
+        charityList.add(new Charity("Charity2", "description2", 101,
                 1400, 0, 0, creator));
-        charityList.add(new Charity("Charity3", "D:/TestImage.jpg", "description3", 130,
+        charityList.add(new Charity("Charity3", "description3", 130,
                 2100, 0, 0, creator));
 
         Mockito.when(this.charityRepository.findAll()).thenReturn(charityList);

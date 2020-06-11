@@ -44,6 +44,11 @@ public class VolunteerServiceImpl implements VolunteerService {
     }
 
     @Override
+    public boolean existsByCharityIdAndUsername(long charityId, String username) {
+        return this.volunteerRepository.findByCharityIdAndUsername(charityId, username).isPresent();
+    }
+
+    @Override
     public void removeAllVolunteersByCharity(Charity charity) {
         nullCharityCheck(charity);
 

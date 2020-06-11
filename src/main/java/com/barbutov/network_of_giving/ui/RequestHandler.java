@@ -8,6 +8,7 @@ public interface RequestHandler {
     String handleRequest(Authentication authentication, String htmlFileName, String jsFileName) throws IOException;
     String handleRequest(Authentication authentication, String htmlFileName) throws IOException;
     String handleRequest(Authentication authentication, String htmlFileName, String jsFileName, Object[] model) throws IOException;
-    String handleRequest(Authentication authentication, String htmlFileName, String jsFileName, Object[] model,
-                         String listItemTemplatePath) throws IOException;
+    String handleRequest(Authentication authentication, String htmlFileName, String jsFileName, Object[][] models,
+                         String[] listItemTemplatePath) throws IOException;
+
 }

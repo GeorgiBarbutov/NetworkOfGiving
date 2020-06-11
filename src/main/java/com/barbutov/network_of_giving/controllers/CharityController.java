@@ -23,6 +23,11 @@ import java.util.List;
 
 @RestController
 public class CharityController {
+    private static final String CHARITIES_FILE_NAME = "charities";
+    private static final String CHARITY_FILE_NAME = "charity";
+    private static final String CHARITY_DETAILS_TEMPLATE_NAME = "charityDetails";
+    private static final String CREATE_CHARITY_TEMPLATE_NAME = "createCharity";
+
     private final CharityService charityService;
     private final UserService userService;
     private final DonationService donationService;
@@ -43,13 +48,14 @@ public class CharityController {
         try {
             List<CharityResponseDto> responseDtos = this.charityService.getAllCharitiesAsResponseDtos();
 
-            Object[] model = new Object[responseDtos.size()];
+            Object[][] models = new Object[1][];
+            models[0] = new Object[responseDtos.size()];
             for (int i = 0; i < responseDtos.size(); i++) {
-                model[i] = responseDtos.get(i);
+                models[0][i] = responseDtos.get(i);
             }
 
-            String html = this.requestHandler.handleRequest(authentication, "charities", "charities",
-                    model, "charityDetails");
+            String html = this.requestHandler.handleRequest(authentication, CHARITIES_FILE_NAME, CHARITIES_FILE_NAME,
+                    models, new String[] { CHARITY_DETAILS_TEMPLATE_NAME });
 
             return new ResponseEntity<>(html, HttpStatus.OK);
         } catch (IOException e) {
@@ -64,7 +70,24 @@ public class CharityController {
             Object[] model = new Object[1];
             model[0] = responseDto;
 
-            String html = this.requestHandler.handleRequest(authentication, "charity", "charity", model);
+            String html = this.requestHandler.handleRequest(authentication, CHARITY_FILE_NAME, CHARITY_FILE_NAME, model);
+
+            return new ResponseEntity<>(html, HttpStatus.OK);
+        } catch (NotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (IOException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(value = "/charity/name/{name}", produces = MediaType.TEXT_HTML_VALUE)
+    public ResponseEntity<String> getByName(Authentication authentication, @PathVariable String name) {
+        try {
+            CharityResponseDto responseDto = this.charityService.getCharityByName(name);
+            Object[] model = new Object[1];
+            model[0] = responseDto;
+
+            String html = this.requestHandler.handleRequest(authentication, CHARITY_FILE_NAME, CHARITY_FILE_NAME, model);
 
             return new ResponseEntity<>(html, HttpStatus.OK);
         } catch (NotFoundException e) {
@@ -77,7 +100,8 @@ public class CharityController {
     @GetMapping(value = "charity/create", produces = MediaType.TEXT_HTML_VALUE)
     public ResponseEntity getCreateCharity(Authentication authentication){
         try {
-            String html = this.requestHandler.handleRequest(authentication, "createCharity", "createCharity");
+            String html = this.requestHandler.handleRequest(authentication, CREATE_CHARITY_TEMPLATE_NAME,
+                    CREATE_CHARITY_TEMPLATE_NAME);
             return new ResponseEntity<>(html, HttpStatus.OK);
         } catch (IOException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -85,7 +109,8 @@ public class CharityController {
     }
 
     @PostMapping(value = "charity/create", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Long> createCharity(@RequestBody CharityRequestDto charityRequestDto, Authentication authentication){
+    public ResponseEntity<Long> createCharity(@RequestBody CharityRequestDto charityRequestDto,
+                                              Authentication authentication){
         try {
             User user = this.userService.findByUsername(authentication.getName());
 
@@ -195,5 +220,14 @@ public class CharityController {
         } catch (IllegalArgumentException e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping(value = "isVolunteered/{id}", produces = MediaType.TEXT_HTML_VALUE)
+    public ResponseEntity<String> getIsVolunteered(@PathVariable String id, Authentication authentication){
+        String username = authentication.getName();
+
+        boolean isVolunteered = this.volunteerService.existsByCharityIdAndUsername(Long.parseLong(id), username);
+
+        return new ResponseEntity<>(String.valueOf(isVolunteered), HttpStatus.OK);
     }
 }
