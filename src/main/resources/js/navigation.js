@@ -6,5 +6,10 @@ function searchForUser(){
 function searchForCharity(){
     let charitySearchElement = document.getElementById("charitySearch");
     let charityName = charitySearchElement.value;
+
+    if(charityName === ""){
+        charityName = " ";
+    }
+
     window.location.replace("http://localhost:8080/charity/name/" + charityName);
 }

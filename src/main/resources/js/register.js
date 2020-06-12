@@ -8,7 +8,6 @@ function sendJSON(){
     let location = document.querySelector('#location');
     let isMale = document.querySelector('#male').checked;
     let isFemale = document.querySelector('#female').checked;
-    let success = document.querySelector("#success");
 
     let gender;
     if(isMale){

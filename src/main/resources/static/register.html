@@ -1,68 +1,54 @@
-<div class="control-group">
-    <!-- Username -->
-    <label class="control-label"  for="username">Username</label>
-    <div class="controls">
-        <input type="text" id="username" name="username" placeholder="" class="input-xlarge">
+<h2>Register</h2>
+<form class="inline mb-2" style="margin-top: 25px">
+    <div class="form-group mb-2">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" placeholder="Username" class="form-control">
     </div>
-</div>
-<div class="control-group">
-    <!-- FirstName -->
-    <label class="control-label"  for="firstName">First Name</label>
-    <div class="controls">
-        <input type="text" id="firstName" name="firstName" placeholder="" class="input-xlarge">
+    <div class="form-group mb-2">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Password" class="form-control">
     </div>
-</div>
-<div class="control-group">
-    <!-- LastName -->
-    <label class="control-label"  for="lastName">Last Name</label>
-    <div class="controls">
-        <input type="text" id="lastName" name="lastName" placeholder="" class="input-xlarge">
+    <div class="form-group mb-2">
+        <label for="passwordConfirm">Confirm Password</label>
+        <input type="password" id="passwordConfirm" name="passwordConfirm" placeholder="Confirm Password" class="form-control">
     </div>
-</div>
-<div class="control-group">
-    <!-- Password-->
-    <label class="control-label" for="password">Password</label>
-    <div class="controls">
-        <input type="password" id="password" name="password" placeholder="" class="input-xlarge">
+    <div class="form-group mb-2">
+        <label for="firstName">First Name</label>
+        <input type="text" id="firstName" name="firstName" placeholder="First Name" class="form-control">
     </div>
-</div>
-<div class="control-group">
-    <!-- Password Confirm-->
-    <label class="control-label"  for="passwordConfirm">Confirm Password </label>
-    <div class="controls">
-        <input type="password" id="passwordConfirm" name="passwordConfirm" placeholder="" class="input-xlarge">
+    <div class="form-group mb-2">
+        <label for="lastName">Last Name</label>
+        <input type="text" id="lastName" name="lastName" placeholder="Last Name" class="form-control">
     </div>
-</div>
-<div class="control-group">
-    <!-- Age -->
-    <label class="control-label"  for="age">Age</label>
-    <div class="controls">
-        <input type="number" id="age" name="age" placeholder="" class="input-xlarge">
+    <div class="form-group mb-2">
+        <label for="age">Age</label>
+        <input type="number" id="age" name="age" placeholder="Age" class="form-control">
     </div>
-</div>
-<div class="control-group">
-    <!-- Gender -->
-    <label class="control-label" >Gender</label>
-    <div class="btn-group btn-group-toggle controls" data-toggle="buttons" style="margin-left: 20px" id="gender">
-        <label class="btn btn-secondary">
-            <input type="radio" name="gender" id="male" autocomplete="off"> Male
-        </label>
-        <label class="btn btn-secondary">
-            <input type="radio" name="gender" id="female" autocomplete="off"> Female
-        </label>
-        <label class="btn btn-secondary">
-            <input type="radio" name="gender" id="other" autocomplete="off"> Other
-        </label>
+    <div class="form-group mb-2">
+        <div>Gender</div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="gender" id="male" value="male">
+            <label class="form-check-label" for="male">
+                Male
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="gender" id="female" value="female">
+            <label class="form-check-label" for="female">
+                Female
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="gender" id="other" value="other">
+            <label class="form-check-label" for="other">
+                Other
+            </label>
+        </div>
     </div>
-</div>
-<div class="control-group">
-    <!-- Location -->
-    <label class="control-label"  for="location">Location</label>
-    <div class="controls">
-        <input type="text" id="location" name="location" placeholder="" class="input-xlarge">
+    <div class="form-group mb-2">
+        <label for="location">Location</label>
+        <textarea id="location" name="location" placeholder="Location" class="form-control"></textarea>
     </div>
-</div>
-
-<!-- Button to send data -->
-<button class="btn btn-success" onclick="sendJSON()">Register</button>
-<p class="message">Already registered? <a href="/login">Login</a></p>
+</form>
+<button class="btn btn-outline-success" onclick="sendJSON()" style="margin-top: 25px">Register</button>
+<p class="message" style="margin-top: 25px">Already registered? <a href="/login">Login</a></p>

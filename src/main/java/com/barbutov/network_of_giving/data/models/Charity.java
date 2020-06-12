@@ -104,6 +104,10 @@ public class Charity {
         return creator.getId();
     }
 
+    public String getCreatorUsername() {
+        return creator.getUsername();
+    }
+
     public int getVolunteersCount() {
         return volunteersCount;
     }

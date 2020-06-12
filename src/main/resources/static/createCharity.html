@@ -1,31 +1,22 @@
-<div class="control-group">
-    <!-- Name -->
-    <label class="control-label"  for="name">Name</label>
-    <div class="controls">
-        <input type="text" id="name" name="name" placeholder="" class="input-xlarge">
-    </div>
-</div>
-<div class="control-group">
-    <!-- Description -->
-    <label class="control-label"  for="description">Description</label>
-    <div class="controls">
-        <input type="text" id="description" name="description" placeholder="" class="input-xlarge">
-    </div>
-</div>
-<div class="control-group">
-    <!-- Desired Participants -->
-    <label class="control-label"  for="desiredParticipants">Desired Participants</label>
-    <div class="controls">
-        <input type="number" id="desiredParticipants" name="desiredParticipants" placeholder="" class="input-xlarge">
-    </div>
-</div>
-<div class="control-group">
-    <!-- Budget Required-->
-    <label class="control-label" for="budgetRequired">Budget Required</label>
-    <div class="controls">
-        <input type="number" id="budgetRequired" name="budgetRequired" placeholder="" class="input-xlarge">
-    </div>
-</div>
+<h2>Crate Charity</h2>
 
-<!-- Button to send data -->
-<button class="btn btn-success" onclick="createCharity()">Create Charity</button>
+<form class="inline mb-2" style="margin-top: 25px">
+    <div class="form-group mb-2">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" placeholder="" class="form-control">
+    </div>
+    <div class="form-group mb-2">
+        <label  for="description">Description</label>
+        <textarea id="description" name="description" placeholder="" class="form-control"></textarea>
+    </div>
+    <div class="form-group mb-2">
+        <label for="desiredParticipants">Desired Participants</label>
+        <input type="number" id="desiredParticipants" name="desiredParticipants" placeholder="" class="form-control">
+    </div>
+    <div class="form-group mb-2">
+        <label for="budgetRequired">Budget Required</label>
+        <input type="number" id="budgetRequired" name="budgetRequired" placeholder="" class="form-control">
+    </div>
+</form>
+
+<button class="btn btn-outline-success" onclick="createCharity()" style="margin-top: 25px">Create Charity</button>

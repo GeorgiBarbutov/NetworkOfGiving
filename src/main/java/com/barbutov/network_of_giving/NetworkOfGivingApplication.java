@@ -13,7 +13,7 @@ import org.springframework.web.filter.CorsFilter;
 @EnableJpaRepositories(basePackageClasses = UserRepository.class)
 public class NetworkOfGivingApplication {
 
-	//TODO: Fix creator bug, add html for error, clean up frontend
+	//TODO: Fix number rounding, validation of input, search bars, icons
 	public static void main(String[] args) {
 		SpringApplication.run(NetworkOfGivingApplication.class, args);
 	}

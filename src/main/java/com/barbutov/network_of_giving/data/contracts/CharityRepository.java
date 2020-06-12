@@ -38,7 +38,6 @@ public interface CharityRepository extends CrudRepository<Charity, Long> {
     Optional<Charity> findByIdAndCreator(long id, User creator);
 
     @Query(nativeQuery = true, value = "SELECT u.username FROM Charities AS c JOIN Users AS u ON u.id = c.creator_id WHERE c.id = ?1")
-
     String getCreator(long charityId);
 
     Optional<Charity> findByName(String name);

@@ -36,6 +36,7 @@ public class CharityServiceImpl implements CharityService {
         List<CharityResponseDto> charityResponseDtos = new ArrayList<>();
         for (Charity charity : charities) {
             String creatorName = this.charityRepository.getCreator(charity.getId());
+            charity.setDescription(shrinkCharityDescription(charity.getDescription()));
             CharityResponseDto dto = mapCharityToCharityResponseDto(charity, creatorName);
 
             charityResponseDtos.add(dto);
@@ -136,7 +137,8 @@ public class CharityServiceImpl implements CharityService {
         List<Charity> charities = this.charityRepository.findAllVolunteeredToCharities(username);
         List<CharityResponseDto> charityResponseDtos = new ArrayList<>();
         for(Charity charity : charities){
-            charityResponseDtos.add(mapCharityToCharityResponseDto(charity, username));
+            charity.setDescription(shrinkCharityDescription(charity.getDescription()));
+            charityResponseDtos.add(mapCharityToCharityResponseDto(charity, charity.getCreatorUsername()));
         }
 
         return charityResponseDtos;
@@ -148,7 +150,8 @@ public class CharityServiceImpl implements CharityService {
 
         List<CharityResponseDto> charityResponseDtos = new ArrayList<>();
         for(Charity charity : charities){
-            charityResponseDtos.add(mapCharityToCharityResponseDto(charity, username));
+            charity.setDescription(shrinkCharityDescription(charity.getDescription()));
+            charityResponseDtos.add(mapCharityToCharityResponseDto(charity, charity.getCreatorUsername()));
         }
 
         return charityResponseDtos;
@@ -160,10 +163,20 @@ public class CharityServiceImpl implements CharityService {
 
         List<CharityResponseDto> charityResponseDtos = new ArrayList<>();
         for(Charity charity : charities){
+            charity.setDescription(shrinkCharityDescription(charity.getDescription()));
             charityResponseDtos.add(mapCharityToCharityResponseDto(charity, username));
         }
 
         return charityResponseDtos;
+    }
+
+    public String shrinkCharityDescription(String description) {
+        if(description.length() > 120){
+            description = description.substring(0, 117);
+            description += "...";
+        }
+
+        return description;
     }
 
     private Charity optionalCheck(Optional<Charity> optional) throws NotFoundException {

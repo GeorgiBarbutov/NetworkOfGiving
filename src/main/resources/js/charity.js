@@ -94,6 +94,7 @@ function donate(id) {
     xhr.setRequestHeader("Content-Type", "application/json");
 
     xhr.onreadystatechange = function () {
+        console.log(status);
         if (xhr.readyState === 4 && xhr.status === 200) {
             writeSuccess("Donated to charity Successfully!");
 
@@ -140,7 +141,7 @@ window.onload = function() {
     let deleteButtonElement = document.getElementById("deleteButton");
     let creatorElement = document.getElementById("creator");
     let idElement = document.getElementById("charityId");
-    let id = idElement.innerText;
+    let id = idElement.innerHTML;
 
     let username = getUsernameOfCurrentUser();
 
@@ -165,6 +166,8 @@ window.onload = function() {
 
             if(!(creatorName === username)){
                 deleteButtonElement.parentNode.removeChild(deleteButtonElement);
+            } else {
+                deleteButtonElement.style.visibility = 'visible';
             }
         }
         if (isVolunteeredRequest.readyState === 4 && isVolunteeredRequest.status !== 200) {
@@ -194,16 +197,28 @@ function getUsernameOfCurrentUser(){
     return username;
 }
 
-function writeSuccess(text) {
+async function writeSuccess(text) {
     let success = document.createElement("div");
-    success.innerHTML = "<div>" + text + "</div>";
+    success.innerHTML = "<div style='color: #28a745'>" + text + "</div>";
 
     buttonsDiv.appendChild(success);
+
+    await resolveAfter3Seconds(success);
 }
 
-function writeFailure(text) {
+async function writeFailure(text) {
     let failure = document.createElement("div");
-    failure.innerHTML = "<div>" + text + "</div>";
+    failure.innerHTML = "<div style='color: #dc3545'>" + text + "</div>";
 
     buttonsDiv.appendChild(failure);
+
+    await resolveAfter3Seconds(failure);
+}
+
+function resolveAfter3Seconds(element) {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            buttonsDiv.removeChild(element);
+        }, 3000);
+    });
 }
