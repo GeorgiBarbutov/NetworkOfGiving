@@ -9,7 +9,7 @@ import com.barbutov.network_of_giving.services.contracts.CharityService;
 import com.barbutov.network_of_giving.services.contracts.DonationService;
 import com.barbutov.network_of_giving.services.contracts.UserService;
 import com.barbutov.network_of_giving.services.contracts.VolunteerService;
-import com.barbutov.network_of_giving.ui.RequestHandler;
+import com.barbutov.network_of_giving.ui.contracts.RequestHandler;
 import com.barbutov.network_of_giving.util.Constants;
 import javassist.NotFoundException;
 import org.springframework.http.HttpStatus;
@@ -17,7 +17,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import org.yaml.snakeyaml.scanner.Constant;
 
 import java.io.IOException;
 import java.net.URI;
@@ -56,7 +55,8 @@ public class CharityController {
             }
 
             String html = this.requestHandler.handleRequest(authentication, Constants.CHARITIES_FILE_NAME,
-                    Constants.CHARITIES_FILE_NAME, models, new String[] { Constants.CHARITY_DETAILS_TEMPLATE_NAME });
+                    Constants.CHARITIES_FILE_NAME, null, models,
+                    new String[] { Constants.CHARITY_DETAILS_TEMPLATE_NAME });
 
             return new ResponseEntity<>(html, HttpStatus.OK);
         } catch (IOException e) {
@@ -75,7 +75,7 @@ public class CharityController {
             model[0] = responseDto;
 
             String html = this.requestHandler.handleRequest(authentication, Constants.CHARITY_FILE_NAME,
-                    Constants.CHARITY_FILE_NAME, model);
+                    Constants.CHARITY_FILE_NAME, Constants.CHARITY_FILE_NAME, model);
 
             return new ResponseEntity<>(html, HttpStatus.OK);
         } catch (NotFoundException e) {
@@ -98,7 +98,7 @@ public class CharityController {
             model[0] = responseDto;
 
             String html = this.requestHandler.handleRequest(authentication, Constants.CHARITY_FILE_NAME,
-                    Constants.CHARITY_FILE_NAME, model);
+                    Constants.CHARITY_FILE_NAME, Constants.CHARITY_FILE_NAME, model);
 
             return new ResponseEntity<>(html, HttpStatus.OK);
         } catch (NotFoundException e) {
@@ -115,7 +115,7 @@ public class CharityController {
             errorHtml = this.requestHandler.handleRequest(authentication, Constants.ERROR_TEMPLATE_NAME);
 
             String html = this.requestHandler.handleRequest(authentication, Constants.CREATE_CHARITY_TEMPLATE_NAME,
-                    Constants.CREATE_CHARITY_TEMPLATE_NAME);
+                    Constants.CREATE_CHARITY_TEMPLATE_NAME, null);
             return new ResponseEntity<>(html, HttpStatus.OK);
         } catch (IOException e) {
             return new ResponseEntity<>(errorHtml, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -148,9 +148,7 @@ public class CharityController {
             errorHtml = this.requestHandler.handleRequest(authentication, Constants.ERROR_TEMPLATE_NAME);
 
             String username = authentication.getName();
-
-            User user = this.userService.findByUsername(username);
-            Charity charity = this.charityService.getCharityByIdAndCreator(Long.parseLong(id), user);
+            Charity charity = this.charityService.getCharityByIdAndCreatorName(Long.parseLong(id), username);
 
             this.volunteerService.removeAllVolunteersByCharity(charity);
             this.donationService.removeAllDonationsByCharity(charity);
@@ -203,7 +201,7 @@ public class CharityController {
         }
     }
 
-    @PostMapping(value = "charity/volunteer/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "charity/volunteer/{id}")
     public ResponseEntity<String> volunteerInCharity(@PathVariable String id, Authentication authentication){
         String errorHtml = "";
 
@@ -232,7 +230,7 @@ public class CharityController {
         }
     }
 
-    @PostMapping(value = "charity/withhold/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "charity/withhold/{id}")
     public ResponseEntity<String> withholdFromCharity(@PathVariable String id, Authentication authentication){
         String errorHtml = "";
 
@@ -250,6 +248,43 @@ public class CharityController {
 
             this.charityService.withholdFromCharity(charity);
             this.volunteerService.removeVolunteer(charity, user);
+
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (NotFoundException e) {
+            return new ResponseEntity<>(errorHtml, HttpStatus.NOT_FOUND);
+        } catch (IllegalArgumentException e){
+            return new ResponseEntity<>(errorHtml, HttpStatus.BAD_REQUEST);
+        } catch (IOException e) {
+            return new ResponseEntity<>(errorHtml, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(value = "charity/edit/{id}", produces = MediaType.TEXT_HTML_VALUE)
+    public ResponseEntity getEditCharity(@PathVariable String id, Authentication authentication){
+        String errorHtml = "";
+        try {
+            errorHtml = this.requestHandler.handleRequest(authentication, Constants.ERROR_TEMPLATE_NAME);
+
+            this.charityService.getCharityByIdAndCreatorName(Long.parseLong(id), authentication.getName());
+
+            String html = this.requestHandler.handleRequest(authentication, Constants.EDIT_CHARITY_TEMPLATE_NAME,
+                    Constants.EDIT_CHARITY_TEMPLATE_NAME, null);
+            return new ResponseEntity<>(html, HttpStatus.OK);
+        } catch (NotFoundException e) {
+            return new ResponseEntity<>(errorHtml, HttpStatus.NOT_FOUND);
+        } catch (IOException e) {
+            return new ResponseEntity<>(errorHtml, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping(value = "charity/edit/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> editCharity(@RequestBody CharityRequestDto charityRequestDto, @PathVariable String id,
+                                                Authentication authentication){
+        String errorHtml = "";
+        try {
+            errorHtml = this.requestHandler.handleRequest(authentication, Constants.ERROR_TEMPLATE_NAME);
+
+            this.charityService.editCharity(charityRequestDto, Long.parseLong(id), authentication.getName());
 
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (NotFoundException e) {

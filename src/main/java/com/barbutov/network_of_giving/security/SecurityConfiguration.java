@@ -39,6 +39,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/charity/withhold/*").authenticated()
                 .antMatchers("/isVolunteered/*").authenticated()
                 .antMatchers("/charity/name/*").authenticated()
+                .antMatchers("/charity/edit/*").authenticated()
                 .antMatchers("/user").authenticated()
                 .and().csrf().disable().formLogin().loginPage("/login").defaultSuccessUrl("/")
                 .and().logout().logoutSuccessUrl("/").init(http);

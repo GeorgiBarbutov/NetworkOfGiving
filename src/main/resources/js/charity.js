@@ -1,8 +1,8 @@
-var buttonsDiv;
-var volunteerElement;
-var withholdElement;
-var volunteersCountElement;
-var isVolunteered;
+let buttonsDiv;
+let volunteerElement;
+let withholdElement;
+let volunteersCountElement;
+let isVolunteered;
 
 function goToCreator() {
     let arguments = document.getElementById("creator").innerText.split(" ");
@@ -99,12 +99,15 @@ function donate(id) {
             writeSuccess("Donated to charity Successfully!");
 
             let text = budgetElement.innerText;
-            let budgetText = text.split(" ")[1].split("/")[0];
+            let collectedText = text.split(" ")[1].split("/")[0];
 
-            let budget = Number(budgetText);
-            budget += amount;
-            budgetElement.innerText = budgetElement.innerText.replace(budgetText,
-                String(budget));
+            let collected = Number(collectedText);
+            collected += amount;
+
+            collected = Math.round((collected + Number.EPSILON) * 100) / 100;
+
+            budgetElement.innerText = budgetElement.innerText.replace(collectedText,
+                String(collected));
         }
         if (xhr.readyState === 4 && xhr.status !== 200) {
             writeFailure("Couldn't donate to this charity!");
@@ -134,11 +137,16 @@ function deleteCharity(id){
     xhr.send();
 }
 
+function goToEditCharity(id){
+    window.location.replace("http://localhost:8080/charity/edit/" + id);
+}
+
 window.onload = function() {
     buttonsDiv = document.getElementById("buttons");
     volunteerElement = document.getElementById("volunteerButton");
     withholdElement = document.getElementById("withholdButton");
     let deleteButtonElement = document.getElementById("deleteButton");
+    let editButtonElement = document.getElementById("editButton");
     let creatorElement = document.getElementById("creator");
     let idElement = document.getElementById("charityId");
     let id = idElement.innerHTML;
@@ -166,8 +174,10 @@ window.onload = function() {
 
             if(!(creatorName === username)){
                 deleteButtonElement.parentNode.removeChild(deleteButtonElement);
+                editButtonElement.parentNode.removeChild(editButtonElement);
             } else {
                 deleteButtonElement.style.visibility = 'visible';
+                editButtonElement.style.visibility = 'visible';
             }
         }
         if (isVolunteeredRequest.readyState === 4 && isVolunteeredRequest.status !== 200) {
@@ -216,7 +226,7 @@ async function writeFailure(text) {
 }
 
 function resolveAfter3Seconds(element) {
-    return new Promise(resolve => {
+    return new Promise(() => {
         setTimeout(() => {
             buttonsDiv.removeChild(element);
         }, 3000);

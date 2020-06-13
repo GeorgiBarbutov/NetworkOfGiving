@@ -14,9 +14,6 @@ public class ProfileDto {
     private List<CharityResponseDto> donatedToCharities;
     private List<CharityResponseDto> volunteeredInCharities;
 
-    public ProfileDto() {
-    }
-
     public ProfileDto(String firstName, String lastName, String username, Gender gender, int age,
                       List<CharityResponseDto> createdCharities, List<CharityResponseDto> donatedToCharities,
                       List<CharityResponseDto> volunteeredInCharities) {

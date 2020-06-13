@@ -6,6 +6,7 @@ import com.barbutov.network_of_giving.data.dtos.CharityResponseDto;
 import com.barbutov.network_of_giving.data.models.Charity;
 import com.barbutov.network_of_giving.data.models.User;
 import com.barbutov.network_of_giving.services.contracts.CharityService;
+import com.barbutov.network_of_giving.util.contracts.CharityEditValidator;
 import com.barbutov.network_of_giving.util.contracts.CharityValidator;
 import com.barbutov.network_of_giving.util.Constants;
 import javassist.NotFoundException;
@@ -20,13 +21,17 @@ import java.util.Optional;
 public class CharityServiceImpl implements CharityService {
     private static final String CHARITY_NOT_FOUND = "Charity Not Found";
 
+
     private final CharityRepository charityRepository;
     private final CharityValidator charityValidator;
+    private final CharityEditValidator charityEditValidator;
 
     @Autowired
-    public CharityServiceImpl(CharityRepository charityRepository, CharityValidator charityValidator) {
+    public CharityServiceImpl(CharityRepository charityRepository, CharityValidator charityValidator,
+                              CharityEditValidator charityEditValidator) {
         this.charityRepository = charityRepository;
         this.charityValidator = charityValidator;
+        this.charityEditValidator = charityEditValidator;
     }
 
     @Override
@@ -87,8 +92,8 @@ public class CharityServiceImpl implements CharityService {
     }
 
     @Override
-    public Charity getCharityByIdAndCreator(long id, User creator) throws NotFoundException {
-        Optional<Charity> optional = this.charityRepository.findByIdAndCreator(id, creator);
+    public Charity getCharityByIdAndCreatorName(long id, String creatorName) throws NotFoundException {
+        Optional<Charity> optional = this.charityRepository.findByIdAndCreatorName(id, creatorName);
 
         return optionalCheck(optional);
     }
@@ -170,7 +175,32 @@ public class CharityServiceImpl implements CharityService {
         return charityResponseDtos;
     }
 
-    public String shrinkCharityDescription(String description) {
+    @Override
+    public void editCharity(CharityRequestDto charityRequestDto, long id, String creatorName) throws NotFoundException {
+        Optional<Charity> optional = this.charityRepository.findByIdAndCreatorName(id, creatorName);
+
+        if(optional.isPresent()){
+            Charity charity = optional.get();
+
+            double collectedAmount = charity.getCollectedAmount();
+            double volunteersCount = charity.getVolunteersCount();
+
+            String editValidation = this.charityEditValidator.validateCharityDto(charityRequestDto, collectedAmount,
+                    volunteersCount);
+
+            if(!editValidation.equals(Constants.VALID)){
+                throw new IllegalArgumentException(editValidation);
+            }
+
+            this.charityRepository.updateCharity(charityRequestDto.getBudgetRequired(), charity.getCollectedAmount(),
+                    charityRequestDto.getDescription(), charityRequestDto.getDesiredParticipants(),
+                    charityRequestDto.getName(), charity.getVolunteersCount(), charity.getId());
+        } else {
+            throw new NotFoundException(CHARITY_NOT_FOUND);
+        }
+    }
+
+    private String shrinkCharityDescription(String description) {
         if(description.length() > 120){
             description = description.substring(0, 117);
             description += "...";

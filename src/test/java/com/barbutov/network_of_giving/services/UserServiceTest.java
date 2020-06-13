@@ -114,10 +114,10 @@ public class UserServiceTest {
 
     @Test
     public void userServiceThrowsExceptionOnNullParametersWhenAddingUsersWithIncorrectParameters() {
-        RegisterDto nullRegisterDto = new RegisterDto(null, "test", "register",
+        RegisterDto nullRegisterDto = new RegisterDto("", "test", "register",
                 "1234", "1234", Gender.MALE, 23, "Sofia");
 
-        TemplateForUserServiceThrowsExceptionWhenAddingUsers(nullRegisterDto, Constants.NULL_FIELDS);
+        TemplateForUserServiceThrowsExceptionWhenAddingUsers(nullRegisterDto, Constants.NULL_OR_EMPTY_FIELDS);
     }
 
     @Test

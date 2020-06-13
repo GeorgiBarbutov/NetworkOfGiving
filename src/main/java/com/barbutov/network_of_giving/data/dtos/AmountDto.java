@@ -6,11 +6,6 @@ public class AmountDto {
     private AmountDto() {
     }
 
-    public AmountDto(double amount) {
-        this();
-        this.amount = amount;
-    }
-
     public double getAmount() {
         return amount;
     }

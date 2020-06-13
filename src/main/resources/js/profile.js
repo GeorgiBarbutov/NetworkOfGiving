@@ -3,10 +3,14 @@ function goToCharity(id){
 }
 
 window.onload = function () {
+  fixGender();
+};
+
+function fixGender() {
   let genderElement = document.getElementById("gender");
   let gender = genderElement.innerText.split(" ")[1];
   let firstChar = gender[0];
   gender = firstChar + gender.substring(1).toLowerCase();
 
   genderElement.innerText = gender;
-};
+}

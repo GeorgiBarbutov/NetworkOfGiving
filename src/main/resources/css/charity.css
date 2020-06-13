@@ -1,0 +1,12 @@
+.creatorName{
+    cursor: pointer
+}
+#deleteButton{
+    visibility: hidden
+}
+#editButton{
+    visibility: hidden;
+}
+#charityId{
+    visibility: hidden;
+}

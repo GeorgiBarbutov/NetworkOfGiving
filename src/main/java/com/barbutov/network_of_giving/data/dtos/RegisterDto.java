@@ -12,9 +12,6 @@ public class RegisterDto {
     private int age;
     private String location;
 
-    public RegisterDto() {
-    }
-
     public RegisterDto(String firstName, String lastName, String username, String password, String passwordConfirm,
                        Gender gender, int age, String location) {
         this.firstName = firstName;

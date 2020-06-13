@@ -1,4 +1,8 @@
+let failedElement;
+
 function createCharity(){
+    failedElement = document.getElementById("failed");
+
     let name = document.querySelector('#name');
     let description = document.querySelector('#description');
     let desiredParticipants = document.querySelector('#desiredParticipants');
@@ -16,7 +20,7 @@ function createCharity(){
             window.location.replace("http://localhost:8080/charity/" + xhr.responseText);
         }
         if (xhr.readyState === 4 && xhr.status !== 200) {
-            alert("Couldn't create charity")
+            writeFailure("Couldn't create charity");
         }
     };
 
@@ -24,4 +28,21 @@ function createCharity(){
         "desiredParticipants": desiredParticipants.value, "budgetRequired": budgetRequired.value });
 
     xhr.send(data);
+}
+
+async function writeFailure(text) {
+    let failure = document.createElement("div");
+    failure.innerHTML = "<div style='color: #dc3545'>" + text + "</div>";
+
+    failedElement.appendChild(failure);
+
+    await resolveAfter3Seconds(failure);
+}
+
+function resolveAfter3Seconds(element) {
+    return new Promise(() => {
+        setTimeout(() => {
+            failedElement.removeChild(element);
+        }, 3000);
+    });
 }

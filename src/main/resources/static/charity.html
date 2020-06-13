@@ -1,24 +1,25 @@
 <div><h2>{{name}}</h2></div>
-<div class="container" style="margin-top: 25px">
+<div class="container top-margin-25">
 <div>Description: {{description}}</div>
     <div id="budget">Budget: {{collectedAmount}}/{{budgetRequired}}</div>
     <div id="volunteers">Volunteers: {{volunteersCount}}/{{desiredParticipants}}</div>
     <div>
         <div id="creator" onclick="goToCreator()">Creator:
-            <span class="text-info" style="cursor: pointer;">{{creatorName}}</span>
+            <span class="text-info creatorName">{{creatorName}}</span>
         </div>
     </div>
-    <div id="buttons" style="margin-top: 25px">
+    <div id="buttons" class="top-margin-25">
         <button id="volunteerButton" onclick="volunteer({{{id}}})" class="btn btn-outline-success">Volunteer</button>
-        <button id="withholdButton" onclick="withhold({{{id}}})" class="btn btn-outline-danger">Withhold Volunteering</button>
-        <button id="deleteButton" onclick="deleteCharity({{{id}}})" class="btn btn-outline-danger" style="visibility: hidden;">Delete Charity</button>
-        <form class="inline mb-2" style="margin-top: 25px">
+        <button id="withholdButton" onclick="withhold({{{id}}})" class="btn btn-outline-success">Withhold Volunteering</button>
+        <button id="deleteButton" onclick="deleteCharity({{{id}}})" class="btn btn-outline-danger">Delete Charity</button>
+        <button id="editButton" onclick="goToEditCharity({{{id}}})" class="btn btn-outline-warning">Edit Charity</button>
+        <form class="inline mb-2 top-margin-25">
             <div class="form-group mb-2">
                 <label for="amount">Amount</label>
                 <input type="number" step="0.01" min="1" id="amount" name="amount" placeholder="" class="form-control">
             </div>
         </form>
-        <button id="donateButton" onclick="donate({{{id}}})" class="btn btn-outline-primary" style="margin-top: 25px">Donate to Charity</button>
+        <button id="donateButton" onclick="donate({{{id}}})" class="btn btn-outline-primary top-margin-25 bottom-margin-25">Donate to Charity</button>
     </div>
-<div id="charityId" style="visibility: hidden">{{{id}}}</div>
+<div id="charityId">{{{id}}}</div>
 </div>

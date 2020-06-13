@@ -18,13 +18,13 @@ public class VolunteerServiceImpl implements VolunteerService {
     }
 
     @Override
-    public Volunteer addVolunteer(Charity charity, User user) {
+    public void addVolunteer(Charity charity, User user) {
         nullCharityCheck(charity);
         nullUserCheck(user);
 
         Volunteer newVolunteer = new Volunteer(user, charity);
 
-        return this.volunteerRepository.save(newVolunteer);
+        this.volunteerRepository.save(newVolunteer);
     }
 
     @Override

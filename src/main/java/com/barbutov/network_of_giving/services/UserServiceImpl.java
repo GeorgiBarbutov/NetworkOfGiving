@@ -4,8 +4,8 @@ import com.barbutov.network_of_giving.data.contracts.UserRepository;
 import com.barbutov.network_of_giving.data.dtos.RegisterDto;
 import com.barbutov.network_of_giving.data.models.User;
 import com.barbutov.network_of_giving.services.contracts.UserService;
+import com.barbutov.network_of_giving.util.Constants;
 import com.barbutov.network_of_giving.util.contracts.RegisterValidator;
-import com.barbutov.network_of_giving.util.RegisterValidatorImpl;
 import javassist.NotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
     public void addUser(RegisterDto registerDto) {
         String validation = this.registerValidator.validateRegisterDto(registerDto);
 
-        if(!validation.equals(RegisterValidatorImpl.VALID)){
+        if(!validation.equals(Constants.VALID)){
             throw new IllegalArgumentException(validation);
         }
 

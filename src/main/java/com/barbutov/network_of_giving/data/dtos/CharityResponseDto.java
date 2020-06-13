@@ -10,9 +10,6 @@ public class CharityResponseDto {
     private double collectedAmount;
     private String creatorName;
 
-    public CharityResponseDto() {
-    }
-
     public CharityResponseDto(long id, String name, String description, int desiredParticipants,
                               double budgetRequired, int volunteersCount, double collectedAmount, String creatorName) {
         this.id = id;
@@ -74,7 +71,7 @@ public class CharityResponseDto {
     }
 
     public double getCollectedAmount() {
-        return collectedAmount;
+        return Math.round(collectedAmount * 100d) / 100d;
     }
 
     public void setCollectedAmount(double collectedAmount) {

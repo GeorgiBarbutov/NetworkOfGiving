@@ -16,7 +16,6 @@ public class RegisterValidatorImpl implements RegisterValidator {
     public static final String USERNAME_TOO_LONG = "Username is too long";
     private static final String LOCATION_TOO_LONG = "Location is too long";
     public static final String USER_IS_TAKEN = "Username is taken";
-    public static final String VALID = "VALID";
 
     private UserRepository userRepository;
 
@@ -25,9 +24,10 @@ public class RegisterValidatorImpl implements RegisterValidator {
     }
 
     public String validateRegisterDto(RegisterDto registerDto){
-        if(registerDto.getPassword() == null || registerDto.getPasswordConfirm() == null || registerDto.getUsername() == null ||
-                registerDto.getFirstName() == null || registerDto.getLastName() == null || registerDto.getLocation() == null){
-            return Constants.NULL_FIELDS;
+        if(registerDto.getPassword().isBlank() || registerDto.getPasswordConfirm().isBlank() ||
+                registerDto.getUsername().isBlank() || registerDto.getFirstName().isBlank() ||
+                registerDto.getLastName().isBlank() || registerDto.getLocation().isBlank()){
+            return Constants.NULL_OR_EMPTY_FIELDS;
         }
 
         if(!registerDto.getPassword().equals(registerDto.getPasswordConfirm())){
@@ -62,6 +62,6 @@ public class RegisterValidatorImpl implements RegisterValidator {
             return USER_IS_TAKEN;
         }
 
-        return VALID;
+        return Constants.VALID;
     }
 }

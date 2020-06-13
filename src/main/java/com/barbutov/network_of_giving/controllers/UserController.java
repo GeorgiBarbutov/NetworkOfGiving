@@ -6,7 +6,7 @@ import com.barbutov.network_of_giving.data.dtos.RegisterDto;
 import com.barbutov.network_of_giving.data.models.User;
 import com.barbutov.network_of_giving.services.contracts.CharityService;
 import com.barbutov.network_of_giving.services.contracts.UserService;
-import com.barbutov.network_of_giving.ui.RequestHandler;
+import com.barbutov.network_of_giving.ui.contracts.RequestHandler;
 import com.barbutov.network_of_giving.util.Constants;
 import javassist.NotFoundException;
 import org.springframework.http.HttpStatus;
@@ -60,7 +60,7 @@ public class UserController {
             }
 
             String html = this.requestHandler.handleRequest(null, Constants.REGISTER_FILE_NAME,
-                    Constants.REGISTER_FILE_NAME);
+                    Constants.REGISTER_FILE_NAME, null);
 
             return new ResponseEntity<>(html, HttpStatus.OK);
         } catch (IOException e) {
@@ -79,7 +79,8 @@ public class UserController {
                 return new ResponseEntity<>(errorHtml, HttpStatus.BAD_REQUEST);
             }
 
-            String html = this.requestHandler.handleRequest(null, Constants.LOGIN_FILE_NAME);
+            String html = this.requestHandler.handleRequest(null, Constants.LOGIN_FILE_NAME,
+                    null, null);
 
             return new ResponseEntity<>(html, HttpStatus.OK);
         } catch (IOException e) {
@@ -98,8 +99,9 @@ public class UserController {
             Object[][] models = getProfileModels(profileDto);
 
             String html = this.requestHandler.handleRequest(authentication, Constants.PROFILE_FILE_NAME,
-                    Constants.PROFILE_FILE_NAME, models, new String[] { Constants.CHARITY_DETAILS_TEMPLATE_NAME,
-                             Constants.CHARITY_DETAILS_TEMPLATE_NAME, Constants.CHARITY_DETAILS_TEMPLATE_NAME });
+                    Constants.PROFILE_FILE_NAME, Constants.PROFILE_FILE_NAME, models,
+                    new String[] { Constants.CHARITY_DETAILS_TEMPLATE_NAME, Constants.CHARITY_DETAILS_TEMPLATE_NAME,
+                            Constants.CHARITY_DETAILS_TEMPLATE_NAME });
 
             return new ResponseEntity<>(html, HttpStatus.OK);
         } catch (NotFoundException e) {

@@ -1,10 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+<h2>Edit Charity</h2>
+
+<form class="inline mb-2 margin-top">
+    <div class="form-group mb-2">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" placeholder="" class="form-control">
+    </div>
+    <div class="form-group mb-2">
+        <label  for="description">Description</label>
+        <textarea id="description" name="description" placeholder="" class="form-control"></textarea>
+    </div>
+    <div class="form-group mb-2">
+        <label for="desiredParticipants">Desired Participants</label>
+        <input type="number" id="desiredParticipants" name="desiredParticipants" placeholder="" class="form-control">
+    </div>
+    <div class="form-group mb-2">
+        <label for="budgetRequired">Budget Required</label>
+        <input type="number" id="budgetRequired" name="budgetRequired" placeholder="" class="form-control">
+    </div>
+</form>
+
+<button class="btn btn-outline-warning top-margin-25 bottom-margin-25" onclick="editCharity()">Edit Charity</button>
+<div id="failed"></div>

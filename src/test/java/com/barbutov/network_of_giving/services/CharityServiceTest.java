@@ -5,6 +5,8 @@ import com.barbutov.network_of_giving.data.dtos.CharityResponseDto;
 import com.barbutov.network_of_giving.data.models.Charity;
 import com.barbutov.network_of_giving.data.models.User;
 import com.barbutov.network_of_giving.services.contracts.CharityService;
+import com.barbutov.network_of_giving.util.CharityEditValidatorImpl;
+import com.barbutov.network_of_giving.util.contracts.CharityEditValidator;
 import com.barbutov.network_of_giving.util.contracts.CharityValidator;
 import com.barbutov.network_of_giving.util.CharityValidatorImpl;
 import javassist.NotFoundException;
@@ -45,8 +47,9 @@ public class CharityServiceTest {
         this.charity = new Charity("Charity1", "description1", 10,
                 100, 0, 0, creator);
 
-        CharityValidator charityValidator = new CharityValidatorImpl();
-        this.charityService = new CharityServiceImpl(this.charityRepository, charityValidator);
+        CharityValidator charityValidator = new CharityValidatorImpl(this.charityRepository);
+        CharityEditValidator charityEditValidator = new CharityEditValidatorImpl(charityValidator);
+        this.charityService = new CharityServiceImpl(this.charityRepository, charityValidator, charityEditValidator);
     }
     @Test
     public void getAllCharitiesAsResponseDtosReturnsAllCharities(){
@@ -87,7 +90,7 @@ public class CharityServiceTest {
         Mockito.when(this.charityRepository.findById(id)).thenReturn(Optional.ofNullable(null));
 
         try {
-            Charity returnedCharity = this.charityService.getCharityById(id);
+            this.charityService.getCharityById(id);
         } catch (NotFoundException e) {
             thrown = true;
             exception = e.getMessage();
@@ -101,10 +104,11 @@ public class CharityServiceTest {
     public void getCharityByIdAndCreatorAReturnsCharity(){
         long id = 1;
 
-        Mockito.when(this.charityRepository.findByIdAndCreator(id, creator)).thenReturn(Optional.of(charity));
+        Mockito.when(this.charityRepository.findByIdAndCreatorName(id, creator.getUsername()))
+                .thenReturn(Optional.of(charity));
 
         try {
-            Charity returnedCharity = this.charityService.getCharityByIdAndCreator(id, creator);
+            Charity returnedCharity = this.charityService.getCharityByIdAndCreatorName(id, creator.getUsername());
             assertEquals(charity.getName(), returnedCharity.getName());
         } catch (NotFoundException e) {
             e.printStackTrace();
@@ -117,10 +121,11 @@ public class CharityServiceTest {
         boolean thrown = false;
         String exception = "";
 
-        Mockito.when(this.charityRepository.findByIdAndCreator(id, creator)).thenReturn(Optional.ofNullable(null));
+        Mockito.when(this.charityRepository.findByIdAndCreatorName(id, creator.getUsername()))
+                .thenReturn(Optional.ofNullable(null));
 
         try {
-            Charity returnedCharity = this.charityService.getCharityByIdAndCreator(id, creator);
+            this.charityService.getCharityByIdAndCreatorName(id, creator.getUsername());
         } catch (NotFoundException e) {
             thrown = true;
             exception = e.getMessage();

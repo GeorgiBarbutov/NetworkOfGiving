@@ -13,7 +13,7 @@ public interface CharityService {
     Charity getCharityById(long id) throws NotFoundException;
     CharityResponseDto getCharityByName(String name) throws NotFoundException;
     CharityResponseDto getCharityByIdAsResponseDto(long id) throws NotFoundException;
-    Charity getCharityByIdAndCreator(long id, User creator) throws NotFoundException;
+    Charity getCharityByIdAndCreatorName(long id, String creatorName) throws NotFoundException;
     Charity addCharity(CharityRequestDto charityRequestDto, User user);
     void deleteCharity(long charityId) throws NotFoundException;
     void donateToCharity(Charity charity, double amount);
@@ -22,4 +22,5 @@ public interface CharityService {
     List<CharityResponseDto> findAllVolunteeredToCharities(String username);
     List<CharityResponseDto> findAllDonatedToCharities(String username);
     List<CharityResponseDto> findAllCreatedCharities(String username);
+    void editCharity(CharityRequestDto charityRequestDto, long id, String creatorName) throws NotFoundException;
 }

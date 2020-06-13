@@ -6,16 +6,6 @@ public class CharityRequestDto {
     private int desiredParticipants;
     private double budgetRequired;
 
-    public CharityRequestDto() {
-    }
-
-    public CharityRequestDto(String name, String description, int desiredParticipants, double budgetRequired) {
-        this.name = name;
-        this.description = description;
-        this.desiredParticipants = desiredParticipants;
-        this.budgetRequired = budgetRequired;
-    }
-
     public String getName() {
         return name;
     }

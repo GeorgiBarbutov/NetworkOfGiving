@@ -9,10 +9,11 @@ public class Constants {
     public static final String ERROR_TEMPLATE_NAME = "error";
     public static final String CHARITY_DETAILS_TEMPLATE_NAME = "charityDetails";
     public static final String CREATE_CHARITY_TEMPLATE_NAME = "createCharity";
+    public static final String EDIT_CHARITY_TEMPLATE_NAME = "editCharity";
 
     public static final String NULL_CHARITY = "Charity can't be null";
     public static final String NULL_USER = "User can't be null";
-    public static final String NULL_FIELDS = "Input contains null fields that can't be null";
+    public static final String NULL_OR_EMPTY_FIELDS = "Input contains null or empty fields";
 
     public static final String VALID = "VALID";
 
