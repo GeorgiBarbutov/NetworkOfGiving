@@ -1,8 +1,9 @@
-package com.barbutov.network_of_giving.services;
+package com.barbutov.network_of_giving;
 
 import com.barbutov.network_of_giving.data.contracts.DonationRepository;
 import com.barbutov.network_of_giving.data.models.Charity;
 import com.barbutov.network_of_giving.data.models.User;
+import com.barbutov.network_of_giving.services.DonationServiceImpl;
 import com.barbutov.network_of_giving.services.contracts.DonationService;
 import org.junit.Before;
 import org.junit.Rule;

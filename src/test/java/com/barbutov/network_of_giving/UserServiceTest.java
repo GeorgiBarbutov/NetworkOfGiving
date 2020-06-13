@@ -1,9 +1,10 @@
-package com.barbutov.network_of_giving.services;
+package com.barbutov.network_of_giving;
 
 import com.barbutov.network_of_giving.data.Gender;
 import com.barbutov.network_of_giving.data.contracts.UserRepository;
 import com.barbutov.network_of_giving.data.dtos.RegisterDto;
 import com.barbutov.network_of_giving.data.models.User;
+import com.barbutov.network_of_giving.services.UserServiceImpl;
 import com.barbutov.network_of_giving.services.contracts.UserService;
 import com.barbutov.network_of_giving.util.Constants;
 import com.barbutov.network_of_giving.util.contracts.RegisterValidator;

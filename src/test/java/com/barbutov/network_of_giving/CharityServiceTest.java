@@ -1,9 +1,10 @@
-package com.barbutov.network_of_giving.services;
+package com.barbutov.network_of_giving;
 
 import com.barbutov.network_of_giving.data.contracts.CharityRepository;
 import com.barbutov.network_of_giving.data.dtos.CharityResponseDto;
 import com.barbutov.network_of_giving.data.models.Charity;
 import com.barbutov.network_of_giving.data.models.User;
+import com.barbutov.network_of_giving.services.CharityServiceImpl;
 import com.barbutov.network_of_giving.services.contracts.CharityService;
 import com.barbutov.network_of_giving.util.CharityEditValidatorImpl;
 import com.barbutov.network_of_giving.util.contracts.CharityEditValidator;
